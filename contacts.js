@@ -59,4 +59,32 @@ const listContact = () => {
     })
 }
 
-module.exports = { simpanContact, listContact }
+const detailContact = (nama) => {
+    const contacts = loadContact();
+
+    const contact = contacts.find((contact) => contact.nama.toLowerCase() === nama.toLowerCase())
+    if (!contact) {
+        console.log(chalk.red(`${nama} tidak ditemukan`))
+        return false
+    }
+    console.log(chalk.cyan(`Nama : ${contact.nama}`))
+    console.log(chalk.cyan(`No. HP : ${contact.noHp}`))
+    if (contact.email) {
+        console.log(chalk.cyan(`Email : ${contact.email}`))
+    }
+}
+
+const deleteContact = (nama) => {
+    const contacts = loadContact()
+    const newContacts = contacts.filter((contact) => contact.nama.toLowerCase() !== nama.toLowerCase())
+
+    if (contacts.length === newContacts.length) {
+        console.log(chalk.red(`${nama} tidak ditemukan`))
+        return false
+    }
+    fs.writeFileSync('data/contacts.json', JSON.stringify(newContacts))
+
+    console.log(chalk.green(`${nama} berhasil dihapus!`))
+
+}
+module.exports = { simpanContact, listContact, detailContact, deleteContact }
